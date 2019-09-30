@@ -26,6 +26,18 @@ link_directories(${PROJECT_BINARY_DIR}/msgs)
 include_directories(${PROJECT_BINARY_DIR}/utils)
 link_directories(${PROJECT_BINARY_DIR}/utils)
 
+# Read grasps example client
+add_executable (read_grasps
+    read_grasps.cc)
+target_link_libraries(read_grasps
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES})
+add_dependencies(read_grasps
+    grasp_msgs
+    grasp_interface)
+
 # Hand plugin example client
 add_executable (hand_remote
     hand_remote.cc)
