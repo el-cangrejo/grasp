@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 
+# C++ standard
+#set(CMAKE_CXX_COMPILER /usr/bin/clang++-6.0)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Project name
 project(grasp VERSION 1.0.0)
 message (STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
