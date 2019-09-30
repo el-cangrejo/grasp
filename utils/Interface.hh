@@ -126,7 +126,7 @@ class Interface
     private: void moveFingers(double value);
 
     /// TODO
-    private: void setJoints(
+    public: void setJoints(
         std::vector<std::string> & joints,
         std::vector<double> & values);
 };
