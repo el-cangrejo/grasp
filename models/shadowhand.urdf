@@ -62,6 +62,9 @@
     </plugin>
   </gazebo>
   
+  <material name="Orange">
+    <color rgba="1.0 0.4 0.0 1.0"/>
+  </material>
   <material name="Blue">
     <color rgba="0.0 0.0 0.8 1.0"/>
   </material>
@@ -346,7 +349,7 @@
     <!--<origin xyz="0.033 0 0.095" rpy="0 0 0" />-->
     <origin rpy="0 0 0" xyz="0.033 0 0.095"/>
     <axis xyz="0 -1.0 0"/>
-    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="2.0"/>
+    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
@@ -365,7 +368,7 @@
       <geometry name="rh_ffproximal_visual">
         <mesh filename="package://sr_description/hand/model/F3.dae" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="Grey"/>
+      <material name="Red"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.025"/>
@@ -379,12 +382,13 @@
     <child link="rh_ffproximal"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_ffproximal">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_ffmiddle">
@@ -430,6 +434,7 @@
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_ffmiddle">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_ffdistal">
@@ -444,7 +449,7 @@
         <!-- Standard distal  -->
         <mesh filename="package://sr_description/hand/model/F1.dae" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="Grey"/>
+      <material name="Red"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -460,10 +465,11 @@
     <origin rpy="0 0 0" xyz="0 0 0.025"/>
     <axis xyz="1 0 0"/>
     <!-- standard distal joint -->
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
   <gazebo reference="rh_FFJ1">
+    <material>Gazebo/Orange</material>
     <provideFeedback>1</provideFeedback>
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
@@ -480,6 +486,7 @@
   </joint>
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_ffdistal">
+    <material>Gazebo/Orange</material>
     <mu1 value="500.0"/>
     <mu2 value="500.0"/>
     <kp value="10000000.0"/>
@@ -512,7 +519,7 @@
     <!--<origin xyz="0.033 0 0.095" rpy="0 0 0" />-->
     <origin rpy="0 0 0" xyz="0.011 0 0.099"/>
     <axis xyz="0 -1.0 0"/>
-    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="2.0"/>
+    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
@@ -545,12 +552,13 @@
     <child link="rh_mfproximal"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_mfproximal">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_mfmiddle">
@@ -590,12 +598,13 @@
     <child link="rh_mfmiddle"/>
     <origin rpy="0 0 0" xyz="0 0 0.045"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_mfmiddle">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_mfdistal">
@@ -626,10 +635,11 @@
     <origin rpy="0 0 0" xyz="0 0 0.025"/>
     <axis xyz="1 0 0"/>
     <!-- standard distal joint -->
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
   <gazebo reference="rh_MFJ1">
+    <material>Gazebo/Orange</material>
     <provideFeedback>1</provideFeedback>
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
@@ -646,6 +656,7 @@
   </joint>
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_mfdistal">
+    <material>Gazebo/Orange</material>
     <mu1 value="500.0"/>
     <mu2 value="500.0"/>
     <kp value="10000000.0"/>
@@ -678,7 +689,7 @@
     <!--<origin xyz="0.033 0 0.095" rpy="0 0 0" />-->
     <origin rpy="0 0 0" xyz="-0.011 0 0.095"/>
     <axis xyz="0 1.0 0"/>
-    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="2.0"/>
+    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
@@ -711,12 +722,13 @@
     <child link="rh_rfproximal"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_rfproximal">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_rfmiddle">
@@ -762,6 +774,7 @@
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_rfmiddle">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_rfdistal">
@@ -792,10 +805,11 @@
     <origin rpy="0 0 0" xyz="0 0 0.025"/>
     <axis xyz="1 0 0"/>
     <!-- standard distal joint -->
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
   <gazebo reference="rh_RFJ1">
+    <material>Gazebo/Orange</material>
     <provideFeedback>1</provideFeedback>
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
@@ -812,6 +826,7 @@
   </joint>
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_rfdistal">
+    <material>Gazebo/Orange</material>
     <mu1 value="500.0"/>
     <mu2 value="500.0"/>
     <kp value="10000000.0"/>
@@ -843,12 +858,13 @@
     <child link="rh_lfmetacarpal"/>
     <origin rpy="0 0 0" xyz="-0.033 0 0.02071"/>
     <axis xyz="0.573576436 0 0.819152044"/>
-    <limit effort="2" lower="0" upper="0.785398163397" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="0.785398163397" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_lfmetacarpal">
+    <!-- <material>Gazebo/Orange</material> -->
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_lfknuckle">
@@ -877,7 +893,7 @@
     <!--<origin xyz="0.033 0 0.095" rpy="0 0 0" />-->
     <origin rpy="0 0 0" xyz="0 0 0.06579"/>
     <axis xyz="0 1.0 0"/>
-    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="2.0"/>
+    <limit effort="2" lower="-0.349065850399" upper="0.349065850399" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
@@ -910,12 +926,13 @@
     <child link="rh_lfproximal"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_lfproximal">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_lfmiddle">
@@ -955,12 +972,13 @@
     <child link="rh_lfmiddle"/>
     <origin rpy="0 0 0" xyz="0 0 0.045"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_lfmiddle">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_lfdistal">
@@ -991,7 +1009,7 @@
     <origin rpy="0 0 0" xyz="0 0 0.025"/>
     <axis xyz="1 0 0"/>
     <!-- standard distal joint -->
-    <limit effort="2" lower="0" upper="1.57079632679" velocity="2.0"/>
+    <limit effort="2" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
   <gazebo reference="rh_LFJ1">
@@ -1011,6 +1029,7 @@
   </joint>
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_lfdistal">
+    <material>Gazebo/Orange</material>
     <mu1 value="500.0"/>
     <mu2 value="500.0"/>
     <kp value="10000000.0"/>
@@ -1044,12 +1063,13 @@
     <child link="rh_thbase"/>
     <origin rpy="0 0.785398163397 0.0" xyz="0.034 -0.0085 0.029"/>
     <axis xyz="0 0 -1.0"/>
-    <limit effort="5.0" lower="-1.0471975512" upper="1.0471975512" velocity="4.0"/>
+    <limit effort="5.0" lower="-1.0471975512" upper="1.0471975512" velocity="0.1"/>
     <dynamics damping="0.2"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_thbase">
+    <!-- <material>Gazebo/Orange</material> -->
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thproximal">
@@ -1079,12 +1099,13 @@
     <child link="rh_thproximal"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1.0 0 0"/>
-    <limit effort="3" lower="0.0" upper="1.2217304764" velocity="4.0"/>
+    <limit effort="3" lower="0.0" upper="1.2217304764" velocity="0.1"/>
     <dynamics damping="0.2"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_thproximal">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thhub">
@@ -1114,12 +1135,13 @@
     <child link="rh_thhub"/>
     <origin rpy="0 0 0" xyz="0 0 0.038"/>
     <axis xyz="1 0 0"/>
-    <limit effort="2.0" lower="-0.209439510239" upper="0.209439510239" velocity="4.0"/>
+    <limit effort="2.0" lower="-0.209439510239" upper="0.209439510239" velocity="0.1"/>
     <dynamics damping="0.2"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_thhub">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thmiddle">
@@ -1155,12 +1177,13 @@
     <child link="rh_thmiddle"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" lower="-0.698131700798" upper="0.698131700798" velocity="2.0"/>
+    <limit effort="2.0" lower="-0.698131700798" upper="0.698131700798" velocity="0.1"/>
     <dynamics damping="0.1"/>
   </joint>
 
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_thmiddle">
+    <material>Gazebo/Orange</material>
     <selfCollide>false</selfCollide>
   </gazebo>
   <!-- common -->
@@ -1194,10 +1217,11 @@
     <child link="rh_thdistal"/>
     <origin rpy="0 0 -1.57079632679" xyz="0 0 0.032"/>
     <axis xyz="1 0 0"/>
-    <limit effort="1.0" lower="0" upper="1.57079632679" velocity="4.0"/>
+    <limit effort="1.0" lower="0" upper="1.57079632679" velocity="0.1"/>
     <dynamics damping="0.2"/>
   </joint>
   <gazebo reference="rh_THJ1">
+    <material>Gazebo/Orange</material>
     <provideFeedback>1</provideFeedback>
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
@@ -1214,6 +1238,7 @@
   </joint>
   <!-- prefix can be anything but usually is "r_" or  "l_" for right and left hands distinction -->
   <gazebo reference="rh_thdistal">
+    <material>Gazebo/Orange</material>
     <mu1 value="500.0"/>
     <mu2 value="500.0"/>
     <kp value="10000000.0"/>
