@@ -8,3 +8,5 @@ data/figures/*
 data/meshes/*
 # Experiment data backup
 data/BACKUP/*
+# Vim files
+*.swp
