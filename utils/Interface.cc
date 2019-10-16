@@ -171,6 +171,63 @@ void Interface::closeFingers(double timeout, bool apply_force)
 }
 
 /////////////////////////////////////////////////
+void Interface::moveUp(double timeout)
+{
+    grasp::msgs::Hand msg;
+    std::string virtual_joint = "virtual_pz_joint";
+    double value = {0.7};
+		state[virtual_joint] = value;
+		grasp::msgs::Target *target = msg.add_pid_targets();
+		target->set_type(POSITION);
+		target->set_joint(virtual_joint);
+		target->set_value(state[virtual_joint]);
+    if (timeout > 0) { msg.set_timeout(timeout); }
+    pub->Publish(msg);
+}
+
+void Interface::getPose()
+{
+	std::vector<std::string> virtual_joints = {
+        "virtual_px_joint","virtual_py_joint", "virtual_pz_joint",
+        "virtual_rr_joint","virtual_rp_joint", "virtual_ry_joint"
+	};
+
+	for (auto& joint : virtual_joints)
+		std::cout << joint << ": " << state[joint] << std::endl;
+}
+
+/////////////////////////////////////////////////
+void Interface::disturbHand()
+{
+    const char* virtual_joint_x = "virtual_px_joint";
+    const char* virtual_joint_y = "virtual_py_joint";
+    const char* virtual_joint_z = "virtual_pz_joint";
+		int delay = 1000;
+
+	// Disturb along x
+		moveJoint(virtual_joint_x,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_x,  -0.110);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_x,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	// Disturb along y
+		moveJoint(virtual_joint_y,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_y,  -0.110);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_y,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+	// Disturb along z
+		moveJoint(virtual_joint_z,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_z,  -0.110);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+		moveJoint(virtual_joint_z,  0.055);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+}
+
+/////////////////////////////////////////////////
 void Interface::raiseHand(double timeout)
 {
     grasp::msgs::Hand msg;
@@ -224,35 +281,39 @@ int Interface::processKeypress(char key)
     {
         // Translate base
         case 'w':
-            moveJoint("virtual_px_joint",  0.025); break;
+            moveJoint("virtual_px_joint",  0.015); break;
         case 's':
-            moveJoint("virtual_px_joint", -0.025); break;
+            moveJoint("virtual_px_joint", -0.015); break;
         case 'a':
-            moveJoint("virtual_py_joint",  0.025); break;
+            moveJoint("virtual_py_joint",  0.015); break;
         case 'd':
-            moveJoint("virtual_py_joint", -0.025); break;
+            moveJoint("virtual_py_joint", -0.015); break;
         case 'e':
-            moveJoint("virtual_pz_joint",  0.025); break;
+            moveJoint("virtual_pz_joint",  0.015); break;
         case 'q':
-            moveJoint("virtual_pz_joint", -0.025); break;
+            moveJoint("virtual_pz_joint", -0.015); break;
         // Rotate base
         case 'i':
-            moveJoint("virtual_rr_joint",  0.025); break;
+            moveJoint("virtual_rr_joint",  0.015); break;
         case 'k':
-            moveJoint("virtual_rr_joint", -0.025); break;
+            moveJoint("virtual_rr_joint", -0.015); break;
         case 'j':
-            moveJoint("virtual_rp_joint",  0.025); break;
+            moveJoint("virtual_rp_joint",  0.015); break;
         case 'l':
-            moveJoint("virtual_rp_joint", -0.025); break;
+            moveJoint("virtual_rp_joint", -0.015); break;
         case 'u':
-            moveJoint("virtual_ry_joint",  0.025); break;
+            moveJoint("virtual_ry_joint",  0.015); break;
         case 'o':
-            moveJoint("virtual_ry_joint", -0.025); break;
+            moveJoint("virtual_ry_joint", -0.015); break;
         // Move fingers
         case 'r':
             openFingers(); break;
         case 'f':
             closeFingers(); break;
+        case 'y':
+						moveUp(); break;
+        case 't':
+						disturbHand(); break;
         default:
             break;
     }

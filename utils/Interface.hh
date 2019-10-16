@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <map>
+#include <chrono>
+#include <thread>
 // Open YAML config files
 #include "yaml-cpp/yaml.h"
 
@@ -18,6 +20,7 @@
 #include <gazebo/gazebo_config.h>
 #include <gazebo/transport/transport.hh>
 #include <gazebo/msgs/msgs.hh>
+#include <gazebo/common/common.hh>
 
 // Custom utilities
 #include "utils.hh"
@@ -111,6 +114,16 @@ class Interface
     /// \brief Raises hand.
     /// \param timeout Timer value
     void raiseHand(double timeout=-1);
+
+    /// \brief Moves hand along x axis.
+    /// \param timeout Timer value
+    void moveUp(double timeout=-1);
+
+    /// \brief .
+    void disturbHand();
+
+    /// \brief .
+    void getPose();
 
     /// TODO
     public: void loop(void);
