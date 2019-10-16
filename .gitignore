@@ -10,3 +10,5 @@ data/meshes/*
 data/BACKUP/*
 # Vim files
 *.swp
+# Numpy files
+*.npy
