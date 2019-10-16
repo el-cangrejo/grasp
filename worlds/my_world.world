@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="default">
+		<scene>
+      <ambient>0.9 0.9 0.9 1</ambient>
+      <background>0.25 0.25 0.25 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <physics type="dart">
+      <real_time_update_rate>0.000000</real_time_update_rate>
+    </physics>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- <include> -->
+    <!--   <uri>model://sphere</uri> -->
+    <!-- </include> -->
+
+    <!-- <include> -->
+    <!--   <uri>model://my_kinect</uri> -->
+    <!-- </include> -->
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <model name="blue_box">
+      <pose>-0.40 0 0.175 0 0 0</pose>
+      <link name="link">
+
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.0083</ixx>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyy>0.0083</iyy>
+            <iyz>0.0</iyz>
+            <izz>0.0083</izz>
+          </inertia>
+        </inertial>
+
+        <collision name="box_collision">
+          <geometry>
+            <box>
+              <size>0.077 0.039 0.039</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.077 0.039 0.039</size>
+            </box>
+          </geometry>
+
+				<material> <!-- Wheel material -->
+          <ambient>0.1 0.1 0.8 1</ambient>
+          <diffuse>0.1 0.1 0.9 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 1</emissive>
+        </material> <!-- End wheel material -->
+
+        </visual>
+      </link>
+
+      <!-- Grasp target plugin -->
+      <plugin name="target_plugin" filename="libTargetPlugin.so">
+      </plugin>
+
+    </model>
+
+    <model name="orange_box">
+      <pose>0.00 0 0.175 0 0 0</pose>
+      <link name="link">
+
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.0083</ixx>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyy>0.0083</iyy>
+            <iyz>0.0</iyz>
+            <izz>0.0083</izz>
+          </inertia>
+        </inertial>
+
+        <collision name="box_collision">
+          <geometry>
+            <box>
+              <size>0.060 0.030 0.030</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.060 0.030 0.030</size>
+            </box>
+          </geometry>
+
+				<material> <!-- Wheel material -->
+          <ambient>0.9 0.5 0.1 1</ambient>
+          <diffuse>0.9 0.5 0.1 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 1</emissive>
+        </material> <!-- End wheel material -->
+
+        </visual>
+      </link>
+
+      <!-- Grasp target plugin -->
+      <plugin name="target_plugin" filename="libTargetPlugin.so">
+      </plugin>
+
+    </model>
+
+    <model name="red_box">
+      <pose>0.40 0 0.175 0 0 0</pose>
+      <link name="link">
+
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.0083</ixx>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyy>0.0083</iyy>
+            <iyz>0.0</iyz>
+            <izz>0.0083</izz>
+          </inertia>
+        </inertial>
+
+        <collision name="box_collision">
+          <geometry>
+            <box>
+              <size>0.060 0.014 0.029</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.060 0.014 0.029</size>
+            </box>
+          </geometry>
+
+				<material> <!-- Wheel material -->
+          <ambient>0.9 0.1 0.1 1</ambient>
+          <diffuse>0.9 0.1 0.1 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 1</emissive>
+        </material> <!-- End wheel material -->
+
+        </visual>
+      </link>
+
+      <!-- Grasp target plugin -->
+      <plugin name="target_plugin" filename="libTargetPlugin.so">
+      </plugin>
+
+    </model>
+
+    <model name="yellow_box">
+      <pose>0.80 0 0.175 0 0 0</pose>
+      <link name="link">
+
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.0083</ixx>
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyy>0.0083</iyy>
+            <iyz>0.0</iyz>
+            <izz>0.0083</izz>
+          </inertia>
+        </inertial>
+
+        <collision name="box_collision">
+          <geometry>
+            <box>
+              <size>0.080 0.080 0.038</size>
+            </box>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.080 0.080 0.038</size>
+            </box>
+          </geometry>
+
+				<material> <!-- Wheel material -->
+          <ambient>0.9 0.9 0.1 1</ambient>
+          <diffuse>0.9 0.9 0.1 1</diffuse>
+          <specular>0 0 0 0</specular>
+          <emissive>0 0 0 1</emissive>
+        </material> <!-- End wheel material -->
+
+        </visual>
+      </link>
+
+      <!-- Grasp target plugin -->
+      <plugin name="target_plugin" filename="libTargetPlugin.so">
+      </plugin>
+
+    </model>
+    <!-- <model name="medium_box"> -->
+    <!--   <pose>0.40 0 0.175 0 0 0</pose> -->
+    <!--   <link name="link"> -->
+
+    <!--     <inertial> -->
+    <!--       <mass>0.05</mass> -->
+    <!--       <inertia> -->
+    <!--         <ixx>0.0083</ixx> -->
+    <!--         <ixy>0.0</ixy> -->
+    <!--         <ixz>0.0</ixz> -->
+    <!--         <iyy>0.0083</iyy> -->
+    <!--         <iyz>0.0</iyz> -->
+    <!--         <izz>0.0083</izz> -->
+    <!--       </inertia> -->
+    <!--     </inertial> -->
+
+    <!--     <collision name="box_collision"> -->
+    <!--       <geometry> -->
+    <!--         <box> -->
+    <!--           <size>0.064 0.025 0.15</size> -->
+    <!--         </box> -->
+    <!--       </geometry> -->
+    <!--     </collision> -->
+
+    <!--     <visual name="visual"> -->
+    <!--       <geometry> -->
+    <!--         <box> -->
+    <!--           <size>0.064 0.025 0.15</size> -->
+    <!--         </box> -->
+    <!--       </geometry> -->
+
+				<!-- <material> <1!-- Wheel material --1> -->
+    <!--       <ambient>0.9 0.1 0.1 1</ambient> -->
+    <!--       <diffuse>0.9 0.1 0.2 1</diffuse> -->
+    <!--       <specular>0 0 0 0</specular> -->
+    <!--       <emissive>0 0 0 1</emissive> -->
+    <!--     </material> <1!-- End wheel material --1> -->
+
+    <!--     </visual> -->
+    <!--   </link> -->
+
+    <!--   <1!-- Grasp target plugin --1> -->
+    <!--   <plugin name="target_plugin" filename="libTargetPlugin.so"> -->
+    <!--   </plugin> -->
+
+    <!-- </model> -->
+
+
+    <!-- <model name="large_box"> -->
+    <!--   <pose>0.85 0 0.175 0 0 0</pose> -->
+    <!--   <link name="link"> -->
+
+    <!--     <inertial> -->
+    <!--       <mass>0.05</mass> -->
+    <!--       <inertia> -->
+    <!--         <ixx>0.0083</ixx> -->
+    <!--         <ixy>0.0</ixy> -->
+    <!--         <ixz>0.0</ixz> -->
+    <!--         <iyy>0.0083</iyy> -->
+    <!--         <iyz>0.0</iyz> -->
+    <!--         <izz>0.0083</izz> -->
+    <!--       </inertia> -->
+    <!--     </inertial> -->
+
+    <!--     <collision name="box_collision"> -->
+    <!--       <geometry> -->
+    <!--         <box> -->
+    <!--           <size>0.090 0.025 0.15</size> -->
+    <!--         </box> -->
+    <!--       </geometry> -->
+    <!--     </collision> -->
+
+    <!--     <visual name="visual"> -->
+    <!--       <geometry> -->
+    <!--         <box> -->
+    <!--           <size>0.090 0.025 0.15</size> -->
+    <!--         </box> -->
+    <!--       </geometry> -->
+
+				<!-- <material> <1!-- Wheel material --1> -->
+    <!--       <ambient>0.9 0.1 0.1 1</ambient> -->
+    <!--       <diffuse>0.9 0.1 0.2 1</diffuse> -->
+    <!--       <specular>0 0 0 0</specular> -->
+    <!--       <emissive>0 0 0 1</emissive> -->
+    <!--     </material> <1!-- End wheel material --1> -->
+
+    <!--     </visual> -->
+    <!--   </link> -->
+
+    <!--   <1!-- Grasp target plugin --1> -->
+    <!--   <plugin name="target_plugin" filename="libTargetPlugin.so"> -->
+    <!--   </plugin> -->
+
+<!--     </model> -->
+
+
+    <!-- <model name="custom_shpere"> -->
+    <!--   <pose>0.41 0 0.175 0 0 0</pose> -->
+    <!--   <link name="link"> -->
+
+    <!--     <inertial> -->
+    <!--       <mass>0.05</mass> -->
+    <!--       <inertia> -->
+    <!--         <ixx>0.0083</ixx> -->
+    <!--         <ixy>1.0</ixy> -->
+    <!--         <ixz>0.0</ixz> -->
+    <!--         <iyy>0.0083</iyy> -->
+    <!--         <iyz>0.0</iyz> -->
+    <!--         <izz>0.0083</izz> -->
+    <!--       </inertia> -->
+    <!--     </inertial> -->
+
+    <!--     <collision name="sphere_collision"> -->
+    <!--       <geometry> -->
+    <!--         <sphere> -->
+							<!-- <radius>.05</radius> -->
+    <!--         </sphere> -->
+    <!--       </geometry> -->
+    <!--     </collision> -->
+
+    <!--     <visual name="visual"> -->
+    <!--       <geometry> -->
+    <!--         <sphere> -->
+							<!-- <radius>.05</radius> -->
+    <!--         </sphere> -->
+    <!--       </geometry> -->
+
+				<!-- <material> <1!-- Wheel material --1> -->
+    <!--       <ambient>0.9 0.1 0.1 1</ambient> -->
+    <!--       <diffuse>0.9 0.1 0.2 1</diffuse> -->
+    <!--       <specular>0 0 0 0</specular> -->
+    <!--       <emissive>0 0 0 1</emissive> -->
+    <!--     </material> <1!-- End wheel material --1> -->
+
+    <!--     </visual> -->
+    <!--   </link> -->
+
+    <!--   <1!-- Grasp target plugin --1> -->
+    <!--   <plugin name="target_plugin" filename="libTargetPlugin.so"> -->
+    <!--   </plugin> -->
+
+    <!-- </model> -->
+  </world>
+</sdf>
