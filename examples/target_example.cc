@@ -18,7 +18,7 @@ int main(int _argc, char **_argv)
 
     // Publish to the target plugin request topic
     gazebo::transport::PublisherPtr pub =
-        node->Advertise<grasp::msgs::TargetRequest>(REQUEST_TOPIC);
+        node->Advertise<grasp::msgs::TargetRequest>(REQUEST_TOPIC, 100);
     // Subscribe to the grasp target topic and link callback function
     gazebo::transport::SubscriberPtr sub =
         node->Subscribe(RESPONSE_TOPIC, onTargetResponse);

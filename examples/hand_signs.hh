@@ -22,7 +22,6 @@
 #include "xtensor/xnpy.hpp"
 
 #include <stdexcept>
-#include <cstdlib>
 
 // Interface
 #include "Interface.hh"
@@ -46,8 +45,6 @@ void parseArgs(
     int argc,
     char** argv,
     std::string & cfg_dir,
-    std::string & grasp_file,
-    std::string & labels_file,
     std::string & robot);
 
 #endif

@@ -27,6 +27,18 @@ include_directories(${PROJECT_BINARY_DIR}/utils)
 link_directories(${PROJECT_BINARY_DIR}/utils)
 
 # Read grasps example client
+add_executable (hand_signs
+    hand_signs.cc)
+target_link_libraries(hand_signs
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES})
+add_dependencies(hand_signs
+    grasp_msgs
+    grasp_interface)
+
+# Read grasps example client
 add_executable (read_grasps
     read_grasps.cc)
 target_link_libraries(read_grasps
@@ -47,6 +59,18 @@ target_link_libraries(hand_remote
     ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
     ${YAML_CPP_LIBRARIES})
 add_dependencies(hand_remote
+    grasp_msgs
+    grasp_interface)
+
+# Hand plugin example client
+add_executable (record_poses
+    record_poses.cc)
+target_link_libraries(record_poses
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES})
+add_dependencies(record_poses
     grasp_msgs
     grasp_interface)
 
