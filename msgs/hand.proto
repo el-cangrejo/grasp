@@ -10,14 +10,22 @@ import "target.proto";
 
 message Hand
 {
+		enum Type
+		{
+				GET = 1;
+
+				SET = 2;
+		}
+
+		required Type								type								= 1;
     /// New hand pose
-    optional gazebo.msgs.Pose   pose                = 1;
+    optional gazebo.msgs.Pose   pose                = 2;
     /// New pid targets
-    repeated Target             pid_targets         = 2;
+    repeated Target             pid_targets         = 3;
     /// Force joint position to target
-    optional bool 				force_target 		= 3;
+    optional bool 				force_target 		= 4;
     /// Controller timeout
-    optional double             timeout             = 4;
+    optional double             timeout             = 5;
     /// Reset
-    optional bool               reset               = 5;
+    optional bool               reset               = 6;
 }
