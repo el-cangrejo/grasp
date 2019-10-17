@@ -16,6 +16,16 @@ int main(int _argc, char **_argv)
     // Load gazebo as a client
     gazebo::client::setup(_argc, _argv);
 
+    // Create the communication node
+    gazebo::transport::NodePtr node(new gazebo::transport::Node());
+    node->Init();
+
+    // Publish to the target plugin request topic
+    gazebo::transport::PublisherPtr pub =
+        node->Advertise<gazebo::msgs::Int>("~/", 100);
+
+		pub->WaitForConnection();
+
     // Interface
     Interface api;
     // Init interface with config file
@@ -95,6 +105,10 @@ int main(int _argc, char **_argv)
 				} catch (std::invalid_argument) {
 					std::cout << "Give number \n";
 				}
+
+				gazebo::msgs::Int msg;
+				msg.set_data(idx);
+				pub->Publish(msg);
 
 				std::vector<double> angles;
 				for (unsigned int i = 0; i < data.shape(1); i++) {
