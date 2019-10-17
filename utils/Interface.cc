@@ -120,6 +120,7 @@ void Interface::reset()
 void Interface::openFingers(double timeout, bool set_position)
 {
     grasp::msgs::Hand msg;
+		msg.set_type(grasp::msgs::Hand::SET);
     // TODO allow grasp to be chosen
     GraspShape grasp = grasps.back();
     for (auto const & pair : grasp.pre)
@@ -138,6 +139,7 @@ void Interface::openFingers(double timeout, bool set_position)
 void Interface::closeFingers(double timeout, bool apply_force)
 {
     grasp::msgs::Hand msg;
+		msg.set_type(grasp::msgs::Hand::SET);
     // TODO allow grasp to be chosen
     GraspShape grasp = grasps.back();
     
@@ -202,7 +204,7 @@ void Interface::disturbHand()
     const char* virtual_joint_x = "virtual_px_joint";
     const char* virtual_joint_y = "virtual_py_joint";
     const char* virtual_joint_z = "virtual_pz_joint";
-		int delay = 1000;
+		int delay = 100;
 
 	// Disturb along x
 		moveJoint(virtual_joint_x,  0.055);
@@ -325,6 +327,7 @@ void Interface::moveJoint(const char *joint, double value)
 {
     state[joint] += value;
     grasp::msgs::Hand msg;
+		msg.set_type(grasp::msgs::Hand::SET);
     grasp::msgs::Target *target = msg.add_pid_targets();
     target->set_type(POSITION);
     target->set_joint(joint);
@@ -340,6 +343,7 @@ void Interface::setJoints(
     if (joints.size() == values.size())
     {
         grasp::msgs::Hand msg;
+				msg.set_type(grasp::msgs::Hand::SET);
         for (unsigned int i = 0; i < joints.size(); i++)
         {
             const char *joint = joints.at(i).c_str();
