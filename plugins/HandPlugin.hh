@@ -123,6 +123,9 @@ namespace gazebo {
         /// Last received request message
         private: boost::shared_ptr<HandMsg const> msg_req;
 
+        /// Flag for pending get pose request
+        private: bool get_pose {false};
+
         // Protected attributes
 
         // Public methods

@@ -294,17 +294,17 @@ bool HandPlugin::loadControllers(sdf::ElementPtr _sdf)
     for (const auto & joint : virtual_joints)
     {
        setPIDController(controller, v_type,
-            joint, v_p, v_i, v_d, 0.0);
+            joint, v_p, v_i, v_d, 0.5);
     }
     for (const auto & group : joint_groups)
     {
         setPIDController(controller, r_type,
-            group.actuated, r_p, r_i, r_d, 0.0);
+            group.actuated, r_p, r_i, r_d, 0.5);
             setPIDTarget(r_type, group.actuated, group.target, true);
         for (int i = 0; i < group.mimic.size(); i++)
         {
             setPIDController(controller, r_type,
-                group.mimic.at(i), r_p, r_i, r_d, 0.0);
+                group.mimic.at(i), r_p, r_i, r_d, 0.5);
             setPIDTarget(r_type, group.mimic.at(i), 
                 group.target * group.multipliers.at(i), true);
         }
@@ -338,6 +338,25 @@ void HandPlugin::onUpdate()
 {
     std::lock_guard<std::mutex> lock(this->data_ptr->mutex);
 
+		if (this->get_pose)
+		{
+			this->get_pose = false;
+			HandMsg msg;
+			msg.set_type(grasp::msgs::Hand::GET);
+			gazebo::msgs::Pose *pose_msg = new gazebo::msgs::Pose();
+			ignition::math::Pose3d pose (
+				virtual_joints.at(0)->WorldPose().Pos().X(),
+				virtual_joints.at(1)->WorldPose().Pos().Y(),
+				virtual_joints.at(2)->WorldPose().Pos().Z(),
+				virtual_joints.at(3)->WorldPose().Rot().Roll(),
+				virtual_joints.at(4)->WorldPose().Rot().Pitch(),
+				virtual_joints.at(5)->WorldPose().Rot().Yaw()
+			);
+			gazebo::msgs::Set(pose_msg, pose);
+			msg.set_allocated_pose(pose_msg);
+			this->data_ptr->pub->Publish(msg);
+		}
+
     // Periodic routine
     if (routine_active && routine_timeout <= world->SimTime()) {
         updateForces();
@@ -370,9 +389,20 @@ void HandPlugin::onReset()
 /////////////////////////////////////////////////
 void HandPlugin::onRequest(HandMsgPtr &_msg)
 {
-    std::lock_guard<std::mutex> lock(data_ptr->mutex);
-    // If no pending request exists
-    if (!msg_req) { msg_req = _msg; }
+    if (_msg->has_type())
+    {
+        int type = _msg->type();
+        std::lock_guard<std::mutex> lock(this->data_ptr->mutex);
+        if (type == grasp::msgs::Hand::GET)
+        {
+					this->get_pose = true;
+					gzdbg << "Received get pose\n";
+				}
+        else if (type == grasp::msgs::Hand::SET)
+				{
+					if (!msg_req) {msg_req = _msg;}
+				}
+		}
 }
 
 /////////////////////////////////////////////////
