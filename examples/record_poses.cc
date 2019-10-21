@@ -1,7 +1,7 @@
 #include "record_poses.hh"
 
-ignition::math::Pose3d g_target_pose      {0,0,0,0,0,0};
-ignition::math::Pose3d g_hand_pose      {0,0,0,0,0,0};
+ignition::math::Pose3d g_target_pose {0,0,0,0,0,0};
+ignition::math::Pose3d g_hand_pose {0,0,0,0,0,0};
 int g_grasp_idx {0};
 
 int main(int _argc, char **_argv)
