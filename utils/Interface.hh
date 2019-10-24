@@ -36,7 +36,7 @@
 #include <iostream>
 
 /// Topic monitored by hand plugin for incoming requests
-#define HAND_PLUGIN_TOPIC "~/hand"
+#define HAND_PLUGIN_TOPIC "~/hand/"
 
 // Key for exiting program (Esc)
 #define KEY_EXIT 27
@@ -70,7 +70,10 @@ class Interface
     private: ignition::math::Matrix4d t_base_gripper;
 
     /// \brief Constructor
-    public: Interface();
+		public: Interface();
+
+    /// \brief Constructor
+		public: Interface(std::string &&model_name);
 
     /// \brief Initalizes interface with config file
     /// \return True on success, false otherwise.

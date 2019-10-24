@@ -7,12 +7,34 @@
 
 #include "Interface.hh"
 
-//////////////////////////////////////////////////
 Interface::Interface()
 {
     node = gazebo::transport::NodePtr(new gazebo::transport::Node());
     node->Init();
     pub = node->Advertise<grasp::msgs::Hand>(HAND_PLUGIN_TOPIC);
+    pub->WaitForConnection();
+
+    std::vector<double> values;
+
+    // Initial configuration
+
+    joints = {
+        "virtual_px_joint","virtual_py_joint", "virtual_pz_joint",
+        "virtual_rr_joint","virtual_rp_joint", "virtual_ry_joint"
+    };
+    values = {
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 0.0,
+    };
+
+    setJoints(joints, values);
+}
+//////////////////////////////////////////////////
+Interface::Interface(std::string &&model_name)
+{
+    node = gazebo::transport::NodePtr(new gazebo::transport::Node());
+    node->Init();
+    pub = node->Advertise<grasp::msgs::Hand>(HAND_PLUGIN_TOPIC+model_name);
     pub->WaitForConnection();
 
     std::vector<double> values;
@@ -99,6 +121,7 @@ void Interface::setPose(ignition::math::Pose3d pose,
     double timeout)
 {
     grasp::msgs::Hand msg;
+		msg.set_type(grasp::msgs::Hand::SET);
     gazebo::msgs::Pose *pose_msg = new gazebo::msgs::Pose();
     gazebo::msgs::Set(pose_msg, pose);
     msg.set_allocated_pose(pose_msg);
