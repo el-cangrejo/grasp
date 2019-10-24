@@ -23,9 +23,9 @@
 #define TARGET_RESPONSE_TOPIC  "~/grasp/target/response"
 //
 /// Topic monitored by target plugin for incoming requests
-#define HAND_REQUEST_TOPIC   "~/hand"
+#define HAND_REQUEST_TOPIC   "~/hand/shadowhand"
 /// Topic to which target plugin publishes replies
-#define HAND_RESPONSE_TOPIC  "~/hand/response"
+#define HAND_RESPONSE_TOPIC  "~/hand/response/shadowhand"
 
 /// Get pose request
 #define TARGET_GET_POSE        grasp::msgs::TargetRequest::GET_POSE
@@ -70,12 +70,18 @@ void onHandResponse(HandMsgPtr & _msg);
 void onGraspIdxResponse(IntMsgPtr & _msg);
 
 /// TODO
-void writeToYml(
-    const std::string & file_name,
-    const std::string & object_name,
-    const ignition::math::Pose3d & target_pose,
-    const ignition::math::Pose3d & hand_pose,
-		const int grasp_idx);
+
+void writeToYml(const std::string &file_name,
+								const std::string &object_name,
+                const std::vector<ignition::math::Pose3d> &target_poses,
+                const std::vector<ignition::math::Pose3d> &hand_poses, 
+								const std::vector<int> grasp_indices);
+
+/// TODO
+void setupCommunications(
+    gazebo::transport::NodePtr & node,
+    std::map<std::string, gazebo::transport::PublisherPtr> & pubs,
+    std::map<std::string, gazebo::transport::SubscriberPtr> & subs);
 
 /// TODO
 void inline waitMs(int delay);
