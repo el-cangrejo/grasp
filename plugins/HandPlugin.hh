@@ -60,9 +60,9 @@ namespace HandPlugin {
     // Plugin messages
 
     /// Topic for incoming requests
-    #define REQUEST_TOPIC    "~/hand"
+    #define REQUEST_TOPIC    "~/hand/"
     /// Topic for outgoing responses
-    #define RESPONSE_TOPIC    "~/hand/response"
+    #define RESPONSE_TOPIC    "~/hand/response/"
 }
 
 namespace gazebo {

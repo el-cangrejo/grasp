@@ -89,6 +89,7 @@ void HandPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
         return;
     }
 
+    auto model_name = _model->GetName();
     // Extract parameters from SDF element
 
     // Finger joints
@@ -118,11 +119,11 @@ void HandPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     this->data_ptr->node = transport::NodePtr(new transport::Node());
     this->data_ptr->node->Init();
     // Subcribe to the monitored requests topic
-    this->data_ptr->sub = this->data_ptr->node->Subscribe(REQUEST_TOPIC,
+    this->data_ptr->sub = this->data_ptr->node->Subscribe(REQUEST_TOPIC+model_name,
         &HandPlugin::onRequest, this);
     // Publish to the hand plugin topic
     this->data_ptr->pub = this->data_ptr->node->
-        Advertise<HandMsg>(RESPONSE_TOPIC);
+        Advertise<HandMsg>(RESPONSE_TOPIC+model_name);
 
     gzmsg << "[HandPlugin] Loaded plugin." << std::endl;
 }
