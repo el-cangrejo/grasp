@@ -12,3 +12,5 @@ data/BACKUP/*
 *.swp
 # Numpy files
 *.npy
+# YAML files
+*.yml
