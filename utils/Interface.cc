@@ -101,6 +101,9 @@ bool Interface::init(
         errorPrintTrace("Unable to parse " << config_file);
         return false;
     }
+		this->openFingers();
+		std::cout << "Opened fingers!\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return true;
 }
 
