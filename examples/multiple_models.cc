@@ -13,8 +13,6 @@ int main(int _argc, char **_argv) {
 	std::string object_name = "orange_box";
 	std::string model_filename = "model://orange_box";
 	std::string file_name = "test_trial.rest.yml";
-	ignition::math::Pose3d offset_pose{0.0, 0, 0, 0, 0, 0};
-	const ignition::math::Pose3d offset_pose_{0.2, 0, 0, 0, 0, 0};
 	std::vector<ignition::math::Pose3d> target_poses;
 	std::vector<ignition::math::Pose3d> hand_poses;
 	std::vector<int> grasp_indices;
@@ -36,36 +34,50 @@ int main(int _argc, char **_argv) {
 	auto pub_delete = node->Advertise<gazebo::msgs::Request>(REQUEST_TOPIC);
 	pub_delete->WaitForConnection();
 
-	for (auto j = 0; j < 10; ++j){
-		int i = 2;
-		auto target_pose = target_poses.at(i) + offset_pose;
-		auto hand_pose = hand_poses.at(i) + offset_pose;
-		
-		std::cout << hand_poses.at(i) << std::endl;
-		std::cout << hand_pose << std::endl;
 
-		auto grasp_idx = grasp_indices.at(i);
+	/* int idx = 2; */
+	int N = 15;
+	std::vector <ignition::math::Pose3d> offset_poses;
+	{
+		const ignition::math::Pose3d offset_pose_{0.3, 0, 0, 0, 0, 0};
+		ignition::math::Pose3d offset_pose{0, 0, 0, 0, 0, 0};
+		for (auto j = 0; j < N; ++j) {
+			offset_poses.push_back(offset_pose);
+			offset_pose += offset_pose_;
+		}
+	}
 
+	std::vector <Interface> interfaces;
+	interfaces.reserve(N);
+	for (auto j = 0; j < N; ++j){
+		auto hand_pose = hand_poses.at(j) + offset_poses[j];
 		auto model_name{"hand_" + std::to_string(j)};
 		model.request.model_name = model_name;
 		model.request.reference_frame = "world";
-		model.request.initial_pose = convert_ignition_to_geometry({0, 0, 0, 0, 0, 0});//
 		gz_spawn_s.call(model); //Call the service
 		waitMs(1000);
-
-		// Interface for hand plugin
 		Interface interface(std::move(model_name));
 		interface.init(config_file,  robot);
+		waitMs(1000);
+		interface.setPose(hand_pose);
+		std::cout << "Hand Pose " << hand_pose << "\n";
+		interfaces.push_back(interface);
+	}
 
+
+	for (auto &interface : interfaces){
 		interface.openFingers();
 		waitMs(1000);
+	}
 
-		interface.setPose(hand_pose);
-		waitMs(2000);
-
+	for (auto j = 0; j < N; ++j){
+		auto target_pose = target_poses.at(j) + offset_poses[j];
 		spawnModelFromFilename(pub, target_pose, model_filename);
-		waitMs(2000);
+		waitMs(1000);
+	}
 
+	for (auto j = 0; j < N; ++j){
+		auto grasp_idx = grasp_indices.at(j);
 		std::vector<double> angles;
 		angles.reserve(data.shape(1));
 		for (unsigned int k = 0; k < data.shape(1); ++k) {
@@ -75,9 +87,7 @@ int main(int _argc, char **_argv) {
 			else
 				angles.push_back(data(grasp_idx, k) * 3.14 / 180);
 		}
-		interface.setJoints(joints, angles);
-
-		offset_pose += offset_pose_;
+		interfaces[j].setJoints(joints, angles);
 	}
 }
 
@@ -95,12 +105,16 @@ void read_urdf_file (gazebo_msgs::SpawnModel &model) {
 
 geometry_msgs::Pose convert_ignition_to_geometry(const ignition::math::Pose3d pose) {
 	geometry_msgs::Pose new_pose;
-	new_pose.position.x = pose.Pos().X();
-	new_pose.position.y = pose.Pos().Y();
-	new_pose.position.z = pose.Pos().Z();
+	/* new_pose.position.x = pose.Pos().Y(); */
+	/* new_pose.position.y = pose.Pos().Z(); */
+	/* new_pose.position.z = pose.Pos().X(); */
+	new_pose.position.x = 0;
+	new_pose.position.y = 0;
+	new_pose.position.z = 0;
 	new_pose.orientation.x = pose.Rot().X();
 	new_pose.orientation.y = pose.Rot().Y();
 	new_pose.orientation.z = pose.Rot().Z();
+	new_pose.orientation.w = pose.Rot().W();
 	return new_pose;
 }
 
