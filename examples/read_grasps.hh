@@ -50,4 +50,5 @@ void parseArgs(
     std::string & labels_file,
     std::string & robot);
 
+void inline waitMs(int delay);
 #endif
