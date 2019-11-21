@@ -48,7 +48,7 @@ class Interface
     public: static const grasp::msgs::Target_Type FORCE =
         grasp::msgs::Target::FORCE;
     /// Position controller target
-    public: static const grasp::msgs::Target_Type POSITION = 
+    public: static const grasp::msgs::Target_Type POSITION =
         grasp::msgs::Target::POSITION;
     /// Velocity controller target
     public: static const grasp::msgs::Target_Type VELOCITY =
@@ -70,10 +70,10 @@ class Interface
     private: ignition::math::Matrix4d t_base_gripper;
 
     /// \brief Constructor
-		public: Interface();
+    public: Interface();
 
     /// \brief Constructor
-		public: Interface(std::string &&model_name);
+    public: Interface(std::string &&model_name);
 
     /// \brief Initalizes interface with config file
     /// \return True on success, false otherwise.
