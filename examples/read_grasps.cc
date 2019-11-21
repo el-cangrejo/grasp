@@ -107,18 +107,20 @@ int main(int _argc, char **_argv) {
     std::vector<double> angles;
     for (unsigned int i = 0; i < data.shape(1); i++) {
       /* if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2") */
-      if (joints.at(i).back() == '2')
-        angles.push_back(2 * data(idx, i) * 3.14 / 180);
-      else
-        angles.push_back(data(idx, i) * 3.14 / 180);
-    }
+
+			/* if (joints.at(i).back() == '2') */ 
+			/* 		angles.push_back(2 * data(idx, i) * 3.14 / 180); */
+			/* else */
+					angles.push_back(data(idx, i) * 3.14 / 180);
+		}
+
+		api.setJoints(joints, angles);
 
     /* std::cout << "Shape 0 : " << angles.size() << std::endl; */
     std::cout << "Object Configuration -> "
               << obj_configs.at(labels(idx, 0) - 1) << std::endl;
     std::cout << "Grasp Type -> " << grasp_types.at(labels(idx, 1) - 1)
               << std::endl;
-    api.setJoints(joints, angles);
   }
 
   // Shut down
@@ -177,3 +179,8 @@ void parseArgs(int argc, char **argv, std::string &cfg_dir,
             << "   Robot                    '" << robot << "'\n"
             << std::endl;
 }
+
+void inline waitMs(int delay) {
+  std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+}
+
