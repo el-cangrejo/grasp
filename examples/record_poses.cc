@@ -56,7 +56,7 @@ int main(int _argc, char **_argv) {
 		}
   }
 
-	std::string model_name = "red_box";
+	std::string model_name = "baseline";
 	std::string out_file = "./" + model_name + "_trial.rest.yml";
 	writeToYml(out_file, model_name, target_poses, hand_poses, grasp_indices);
 
