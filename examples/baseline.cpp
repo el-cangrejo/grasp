@@ -13,7 +13,7 @@ int main(int _argc, char **_argv)
 	const auto indices_file = "data/indices.npy";
   const auto indices_data = xt::load_npy<double>(indices_file);
 
-	std::string file_name = "test_trial.rest.yml";
+	std::string file_name = "baseline_trial.rest.yml";
 	std::vector<ignition::math::Pose3d> target_poses;
 	std::vector<ignition::math::Pose3d> hand_poses;
 	std::vector<int> grasp_indices;
