@@ -10,9 +10,9 @@ int main(int _argc, char **_argv) {
 	gazebo_msgs::SpawnModel model;
 	read_urdf_file(model);
  
-	std::string object_name = "orange_box";
-	std::string model_filename = "model://orange_box";
-	std::string file_name = "test_trial.rest.yml";
+	std::string object_name = "red_box";
+	std::string model_filename = "model://red_box";
+	std::string file_name = "baseline_trial.rest.yml";
 	std::vector<ignition::math::Pose3d> target_poses;
 	std::vector<ignition::math::Pose3d> hand_poses;
 	std::vector<int> grasp_indices;
@@ -82,10 +82,10 @@ int main(int _argc, char **_argv) {
 		angles.reserve(data.shape(1));
 		for (unsigned int k = 0; k < data.shape(1); ++k) {
 			/* if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2") */
-			if (joints.at(k).back() == '2')
-				angles.push_back(2 * data(grasp_idx, k) * 3.14 / 180);
-			else
-				angles.push_back(data(grasp_idx, k) * 3.14 / 180);
+			/* if (joints.at(k).back() == '2') */
+			/* 	angles.push_back(2 * data(grasp_idx, k) * 3.14 / 180); */
+			/* else */
+			angles.push_back(data(grasp_idx, k) * 3.14 / 180);
 		}
 		interfaces[j].setJoints(joints, angles);
 	}
