@@ -55,7 +55,8 @@ void TargetPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     ignition::math::Pose3d pose = _model->WorldPose();
     ignition::math::Box bnd_box = _model->CollisionBoundingBox();
     ignition::math::Pose3d offset_z(0,0,bnd_box.ZLength() / 2,0,0,0);
-    this->init_pose = pose + offset_z;
+    /* this->init_pose = pose + offset_z; */
+    this->init_pose = pose;
     _model->SetWorldPose(this->init_pose);
 
     // Connect to world update event
