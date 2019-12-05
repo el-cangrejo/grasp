@@ -65,7 +65,9 @@ int main(int _argc, char **_argv)
 	api.openFingers();
 	waitMs(1000);
 
-	std::cout << "Indices 0 : " << indices_data(0, 0) << " " << indices_data(0, 1) << "\n";
+	const int trial_idx = 0;
+	std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " 
+															<< indices_data(trial_idx, 1) << "\n";
 	std::cout << "Indices 0 : " <<grasp_indices.at(0) << "\n";
 
 	std::pair<bool, int> res_1 = findInVector<int>(grasp_indices, indices_data(0, 0));
@@ -86,6 +88,31 @@ int main(int _argc, char **_argv)
 	std::cout << target_poses.at(res_1.second) << "\n";
 
 	api.setJoints(joints, angles);
+	waitMs(1000);
+
+	/* gazebo::transport::PublisherPtr pub_physics = */
+	/* node->Advertise<gazebo::msgs::Physics>("/gazebo/default/physics"); */
+	/* pub_physics->WaitForConnection(); */
+	/* gazebo::msgs::Vector3d* grvty = new gazebo::msgs::Vector3d(); */
+	/* gazebo::msgs::Physics msg; */
+	/* grvty->set_x(0.0); */
+	/* grvty->set_y(0.0); */
+	/* grvty->set_z(-9.8); */
+	/* msg.set_allocated_gravity(grvty); */
+	/* pub_physics->Publish(msg); */
+
+	for (auto traj_idx = 0; traj_idx < trajectories_data.shape(1); ++traj_idx) {
+    std::vector<double> angles;
+    for (unsigned int i = 0; i < trajectories_data.shape(2); i++) {
+					angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180);
+		}
+		api.setJoints(joints, angles);
+		waitMs(200);
+  }
+
+  // Shut down
+  gazebo::client::shutdown();
+  return 0;
 }
 
 
