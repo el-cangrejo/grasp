@@ -1,6 +1,6 @@
-#ifndef _BASELINE_HH
-#define _BASELINE_HH
-
+#include <vector>
+#include <algorithm>
+ 
 //ROS
 #include <gazebo_msgs/SpawnModel.h>
 #include <geometry_msgs/Pose.h>
@@ -23,6 +23,16 @@
 
 void read_urdf_file (gazebo_msgs::SpawnModel &model);
 
+void loadFromYml(
+    const std::string & file_name,
+    const std::string & object_name,
+		std::vector<ignition::math::Pose3d> &target_poses,
+		std::vector<ignition::math::Pose3d> &hand_poses, 
+		std::vector<int> &grasp_indices);
+
+void parseArgs(int argc, char **argv, std::string &cfg_dir,
+               std::string &robot);
+
 std::vector<std::string> joints = {"rh_FFJ2", //1
 																	 "rh_FFJ2", //2
 																	 "rh_FFJ3", //3
@@ -44,3 +54,32 @@ std::vector<std::string> joints = {"rh_FFJ2", //1
 																	 "rh_THJ3", //19
 																	 "rh_THJ4", //20
 																	 "rh_THJ5"}; //21
+
+void inline waitMs(int delay);
+
+template < typename T>
+std::pair<bool, int > findInVector(const std::vector<T>  & vecOfElements, const T  & element)
+{
+	std::pair<bool, int > result;
+ 
+	// Find given element in vector
+	auto it = std::find(vecOfElements.begin(), vecOfElements.end(), element);
+ 
+	if (it != vecOfElements.end())
+	{
+		result.second = distance(vecOfElements.begin(), it);
+		result.first = true;
+	}
+	else
+	{
+		result.first = false;
+		result.second = -1;
+	}
+ 
+	return result;
+}
+
+void spawnModelFromFilename(
+    gazebo::transport::PublisherPtr pub,
+    ignition::math::Pose3d & pose,
+    const std::string & filename);
