@@ -10,6 +10,7 @@ if (PKG_CONFIG_FOUND)
 endif()
 
 find_package(yaml-cpp REQUIRED)
+find_package(catkin REQUIRED COMPONENTS roscpp gazebo_ros)
 
 # Include and link Gazebo and SDF libraries
 include_directories(${GAZEBO_INCLUDE_DIRS} ${SDF_INCLUDE_DIRS})
@@ -25,6 +26,8 @@ link_directories(${PROJECT_BINARY_DIR}/msgs)
 # Include custom utilities
 include_directories(${PROJECT_BINARY_DIR}/utils)
 link_directories(${PROJECT_BINARY_DIR}/utils)
+
+include_directories(${catkin_INCLUDE_DIRS})
 
 # Read grasps example client
 add_executable (hand_signs
@@ -90,3 +93,14 @@ target_link_libraries(contacts_example
 add_dependencies(contacts_example
     grasp_msgs)
 
+# Hand plugin example client
+add_executable (baseline
+    baseline.cpp)
+target_link_libraries(baseline
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(baseline
+    grasp_msgs
+    grasp_interface)
