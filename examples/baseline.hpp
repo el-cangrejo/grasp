@@ -21,6 +21,20 @@
 // Interface
 #include "Interface.hh"
 
+// Custom messages
+#include "target_request.pb.h"
+#include "target_response.pb.h"
+
+/// Topic monitored by target plugin for incoming requests
+#define TARGET_REQUEST_TOPIC   "~/grasp/target"
+/// Topic to which target plugin publishes replies
+#define TARGET_RESPONSE_TOPIC  "~/grasp/target/response"
+/// Get pose request
+#define TARGET_GET_POSE        grasp::msgs::TargetRequest::GET_POSE
+
+typedef const boost::shared_ptr<const grasp::msgs::TargetResponse>
+    TargetResponsePtr;
+
 void read_urdf_file (gazebo_msgs::SpawnModel &model);
 
 void loadFromYml(
@@ -77,9 +91,19 @@ std::pair<bool, int > findInVector(const std::vector<T>  & vecOfElements, const 
 	}
  
 	return result;
-}
+};
 
 void spawnModelFromFilename(
     gazebo::transport::PublisherPtr pub,
     ignition::math::Pose3d & pose,
     const std::string & filename);
+
+void removeModel(
+    gazebo::transport::PublisherPtr pub,
+    const std::string & name);
+
+void setGravity(gazebo::transport::PublisherPtr pub_physics, float z_value);
+
+void getTargetPose(gazebo::transport::PublisherPtr pub);
+
+void onTargetResponse(TargetResponsePtr & _msg);
