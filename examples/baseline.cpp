@@ -1,5 +1,7 @@
 #include "baseline.hpp"
 
+ignition::math::Pose3d g_target_pose{0, 0, 0, 0, 0, 0};
+int g_count_respones{0};
 
 int main(int _argc, char **_argv)
 {
@@ -36,7 +38,7 @@ int main(int _argc, char **_argv)
 						<< "Grasp indices size " << grasp_indices.size() << "\n"
 						<< "\n";
 
-	// ROS calls for spawning hand
+	/* // ROS calls for spawning hand */
 	ros::init(_argc, _argv, "spawn_model");
 	ros::NodeHandle ros_node;
 	ros::ServiceClient gz_spawn_s = ros_node.serviceClient<gazebo_msgs::SpawnModel> ("/gazebo/spawn_urdf_model");
@@ -54,67 +56,108 @@ int main(int _argc, char **_argv)
 	/* // Setup communication */
 	gazebo::transport::NodePtr node(new gazebo::transport::Node());
 	node->Init();
+	std::cout << "Initialize communication\n";
 	auto pub_factory = node->Advertise<gazebo::msgs::Factory>("~/factory");
 	pub_factory->WaitForConnection();
+	auto pub_physics = node->Advertise<gazebo::msgs::Physics>("~/physics");
+	pub_physics->WaitForConnection();
+	auto pub_delete = node->Advertise<gazebo::msgs::Request>("~/request");
+	pub_delete->WaitForConnection();
+	auto pub_target = node->Advertise<grasp::msgs::TargetRequest>(TARGET_REQUEST_TOPIC, 100);
+	auto sub_target = node->Subscribe(TARGET_RESPONSE_TOPIC, onTargetResponse);
+
 	// Initialize hand interface
 	Interface api;
 	std::cout << "Initialize interface\n";
 	api.init(config_file,  robot);
 
 	waitMs(1000);
-	api.openFingers();
-	waitMs(1000);
 
-	const int trial_idx = 0;
-	std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " 
-															<< indices_data(trial_idx, 1) << "\n";
-	std::cout << "Indices 0 : " <<grasp_indices.at(0) << "\n";
+	int count_succ_regrasps = 0;
+	for (int trial_idx = 0; trial_idx < indices_data.shape(0); ++trial_idx) {
+	/* for (int trial_idx = 0; trial_idx < 25; ++trial_idx) { */
+		std::cout << "Trial: " << trial_idx << "\n";
+		/* std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " */ 
+		/* 														<< indices_data(trial_idx, 1) << "\n"; */
+		/* std::cout << "Indices 0 : " <<grasp_indices.at() << "\n"; */
 
-	std::pair<bool, int> res_1 = findInVector<int>(grasp_indices, indices_data(0, 0));
-	std::pair<bool, int> res_2 = findInVector<int>(grasp_indices, indices_data(0, 1));
+		std::pair<bool, int> res_1 = findInVector<int>(grasp_indices, indices_data(trial_idx, 0));
+		std::pair<bool, int> res_2 = findInVector<int>(grasp_indices, indices_data(trial_idx, 1));
+		/* std::cout << res_1.second << " " << res_2.second << "\n"; */
 
-	std::cout << res_1.second << " " << res_2.second << "\n";
 
-	api.setPose(hand_poses.at(res_1.second));
-	waitMs(1000);
-	
-	spawnModelFromFilename(pub_factory, target_poses.at(res_1.second), model_uri);
-	waitMs(1000);
+		setGravity(pub_physics, -9.8);
+		api.openFingers();
+		waitMs(1000);
 
-	std::vector<double> angles;
-	for (unsigned int k = 0; k < grasp_data.shape(1); ++k) {
-			angles.push_back(grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180);
-	}
-	std::cout << target_poses.at(res_1.second) << "\n";
+		api.setPose(hand_poses.at(res_1.second));
+		waitMs(1000);
+		
+		setGravity(pub_physics, 0.0);
 
-	api.setJoints(joints, angles);
-	waitMs(1000);
+		spawnModelFromFilename(pub_factory, target_poses.at(res_1.second), model_uri);
+		waitMs(1000);
 
-	/* gazebo::transport::PublisherPtr pub_physics = */
-	/* node->Advertise<gazebo::msgs::Physics>("/gazebo/default/physics"); */
-	/* pub_physics->WaitForConnection(); */
-	/* gazebo::msgs::Vector3d* grvty = new gazebo::msgs::Vector3d(); */
-	/* gazebo::msgs::Physics msg; */
-	/* grvty->set_x(0.0); */
-	/* grvty->set_y(0.0); */
-	/* grvty->set_z(-9.8); */
-	/* msg.set_allocated_gravity(grvty); */
-	/* pub_physics->Publish(msg); */
-
-	for (auto traj_idx = 0; traj_idx < trajectories_data.shape(1); ++traj_idx) {
-    std::vector<double> angles;
-    for (unsigned int i = 0; i < trajectories_data.shape(2); i++) {
-					angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180);
+		pub_target->WaitForConnection();
+		std::vector<double> angles;
+		for (unsigned int k = 0; k < grasp_data.shape(1); ++k) {
+				angles.push_back(grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180);
 		}
-		api.setJoints(joints, angles);
-		waitMs(200);
-  }
+		std::cout << target_poses.at(res_1.second) << "\n";
 
-  // Shut down
+		api.setJoints(joints, angles);
+		waitMs(1000);
+
+		setGravity(pub_physics, -9.8);
+		std::vector<std::string> virtual_pz_joint{"virtual_pz_joint"};
+		std::vector<double> value{hand_poses.at(res_1.second).Pos().Z() + 0.01};
+		api.setJoints(virtual_pz_joint, value);
+		/* api.setPose(hand_poses.at(res_1.second)); */
+		waitMs(1000);
+
+		for (auto traj_idx = 0; traj_idx < trajectories_data.shape(1); ++traj_idx) {
+			std::vector<double> angles;
+			for (unsigned int i = 0; i < trajectories_data.shape(2); i++) {
+				angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180);
+			}
+			api.setJoints(joints, angles);
+			waitMs(200);
+		}
+
+		/* waitMs(5000); */
+
+		getTargetPose(pub_target);
+		waitMs(1000);
+		
+		if (g_target_pose.Pos().Z() > 0.1) {
+			std::cout << "Successful regrasp!\n\n";
+			count_succ_regrasps++;
+		} else {
+			std::cout << "Unsuccessful regrasp!\n\n";
+		}
+		std::string entity_name = "red_box";
+		removeModel(pub_delete, entity_name);
+	}
+	
+	std::cout << "\n";
+	std::cout << "Number of successful regrasps : " << count_succ_regrasps << "!\n";
+	std::cout << "Number of responses : " << g_count_respones << "!\n";
+	//
+	// Shut down
   gazebo::client::shutdown();
   return 0;
 }
 
+void setGravity(gazebo::transport::PublisherPtr pub_physics, float z_value) {
+	gazebo::msgs::Vector3d* grvty = new gazebo::msgs::Vector3d();
+	gazebo::msgs::Physics msg;
+	grvty->set_x(0.0);
+	grvty->set_y(0.0);
+	grvty->set_z(z_value);
+	msg.set_allocated_gravity(grvty);
+	pub_physics->Publish(msg);
+	waitMs(500);
+}
 
 void read_urdf_file (gazebo_msgs::SpawnModel &model) {
   std::ifstream file("./models/shadowhand.urdf");
@@ -220,4 +263,27 @@ void spawnModelFromFilename(
 		std::cout << pose << "\n";
     msg.set_allocated_pose(pose_msg);
     pub->Publish(msg);
+}
+void removeModel(
+    gazebo::transport::PublisherPtr pub,
+    const std::string & name)
+{
+    gazebo::msgs::Request *msg;
+    msg = gazebo::msgs::CreateRequest("entity_delete", name);
+    pub->Publish(*msg);
+}
+
+void getTargetPose(gazebo::transport::PublisherPtr pub) {
+  grasp::msgs::TargetRequest msg;
+  msg.set_type(TARGET_GET_POSE);
+  pub->Publish(msg);
+}
+
+void onTargetResponse(TargetResponsePtr &_msg) {
+  if (_msg->has_pose()) {
+    ignition::math::Pose3d pose(gazebo::msgs::ConvertIgn(_msg->pose()));
+    g_target_pose = pose;
+		g_count_respones++;
+    std::cout << "Received target pose " << pose << std::endl;
+  }
 }
