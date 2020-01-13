@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
- 
+#include <chrono> 
+
 //ROS
 #include <gazebo_msgs/SpawnModel.h>
 #include <geometry_msgs/Pose.h>
@@ -17,6 +18,7 @@
 #include "xtensor/xarray.hpp"
 #include <xtensor/xio.hpp>
 #include "xtensor/xnpy.hpp"
+#include <xtensor/xbuilder.hpp>
 
 // Interface
 #include "Interface.hh"
