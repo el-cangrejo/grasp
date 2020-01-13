@@ -9,10 +9,10 @@ int main(int _argc, char **_argv)
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
 
-	const auto trajectories_file = "data/trajectories.npy";
+	const auto trajectories_file = "data/trajectories_vae10_30.npy";
   const auto trajectories_data = xt::load_npy<double>(trajectories_file);
 
-	const auto indices_file = "data/indices.npy";
+	const auto indices_file = "data/indices_vae10_30.npy";
   const auto indices_data = xt::load_npy<double>(indices_file);
 
 	std::cout << "Grasps " << grasp_data.shape(0) << " " 
@@ -74,19 +74,23 @@ int main(int _argc, char **_argv)
 	waitMs(1000);
 
 	int count_succ_regrasps = 0;
+	auto start = std::chrono::high_resolution_clock::now();
+
+	xt::xarray<int>::shape_type sh0 = {1, 3};
+	auto a0 = xt::empty<int>(sh0);
+	
 	for (int trial_idx = 0; trial_idx < indices_data.shape(0); ++trial_idx) {
-	/* for (int trial_idx = 0; trial_idx < 25; ++trial_idx) { */
+	/* for (int trial_idx = 0; trial_idx < 5; ++trial_idx) { */
 		std::cout << "Trial: " << trial_idx << "\n";
-		/* std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " */ 
-		/* 														<< indices_data(trial_idx, 1) << "\n"; */
+		std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " 
+																<< indices_data(trial_idx, 1) << "\n";
 		/* std::cout << "Indices 0 : " <<grasp_indices.at() << "\n"; */
 
 		std::pair<bool, int> res_1 = findInVector<int>(grasp_indices, indices_data(trial_idx, 0));
 		std::pair<bool, int> res_2 = findInVector<int>(grasp_indices, indices_data(trial_idx, 1));
 		/* std::cout << res_1.second << " " << res_2.second << "\n"; */
 
-
-		setGravity(pub_physics, -9.8);
+		setGravity(pub_physics, -8.8);
 		api.openFingers();
 		waitMs(1000);
 
@@ -124,25 +128,31 @@ int main(int _argc, char **_argv)
 			waitMs(200);
 		}
 
-		/* waitMs(5000); */
+		waitMs(5000);
 
 		getTargetPose(pub_target);
 		waitMs(1000);
-		
 		if (g_target_pose.Pos().Z() > 0.1) {
 			std::cout << "Successful regrasp!\n\n";
 			count_succ_regrasps++;
+			xt::xarray<double> b1 = {{indices_data(trial_idx, 0), indices_data(trial_idx, 1), 1}};
+			a0 = xt::vstack(xt::xtuple(a0, b1));
 		} else {
 			std::cout << "Unsuccessful regrasp!\n\n";
+			xt::xarray<double> b1 = {{indices_data(trial_idx, 0), indices_data(trial_idx, 1), 0}};
+			a0 = xt::vstack(xt::xtuple(a0, b1));
 		}
 		std::string entity_name = "red_box";
 		removeModel(pub_delete, entity_name);
 	}
-	
+	auto finish = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = finish - start;
 	std::cout << "\n";
+	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	std::cout << "Number of successful regrasps : " << count_succ_regrasps << "!\n";
 	std::cout << "Number of responses : " << g_count_respones << "!\n";
-	//
+	/* std::cout << "Number of responses : " << a0 << "!\n"; */
+  xt::dump_npy("baseline_stats_vae10_30.npy", a0);//
 	// Shut down
   gazebo::client::shutdown();
   return 0;
