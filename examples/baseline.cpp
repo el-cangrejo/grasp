@@ -6,15 +6,18 @@ int g_count_respones{0};
 int main(int _argc, char **_argv)
 {
 	// Read grasps, trajectories, poses
+	const auto stats_filename = "data/stats/baseline_stats_pca_10.npy";
+
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
 
-	const auto trajectories_file = "data/trajectories_vae10_30.npy";
+	const auto trajectories_file = "data/traj/trajectories_pca_10.npy";
+	/* const auto trajectories_file = "data/traj/trajectories_cvae10_10.npy"; */
   const auto trajectories_data = xt::load_npy<double>(trajectories_file);
 
-	const auto indices_file = "data/indices_vae10_30.npy";
+	const auto indices_file = "data/traj/indices_pca_10.npy";
+	/* const auto indices_file = "data/traj/indices_cvae10_10.npy"; */
   const auto indices_data = xt::load_npy<double>(indices_file);
-
 	std::cout << "Grasps " << grasp_data.shape(0) << " " 
 												 << grasp_data.shape(1) << "\n";
 
@@ -28,6 +31,13 @@ int main(int _argc, char **_argv)
 	const std::string model_uri = "model://red_box";
 	const std::string file_name = "baseline_trial.rest.yml";
 	const std::string object_name = "baseline";
+	std::string entity_name = "red_box";
+
+	/* const std::string model_uri = "model://yellow_box"; */
+	/* const std::string file_name = "yellow_small_side_trial.rest.yml"; */
+	/* const std::string object_name = "yellow_small_side"; */
+	/* std::string entity_name = "yellow_box"; */
+
 	std::vector<ignition::math::Pose3d> target_poses;
 	std::vector<ignition::math::Pose3d> hand_poses;
 	std::vector<int> grasp_indices;
@@ -88,7 +98,7 @@ int main(int _argc, char **_argv)
 
 		std::pair<bool, int> res_1 = findInVector<int>(grasp_indices, indices_data(trial_idx, 0));
 		std::pair<bool, int> res_2 = findInVector<int>(grasp_indices, indices_data(trial_idx, 1));
-		/* std::cout << res_1.second << " " << res_2.second << "\n"; */
+		std::cout << res_1.second << " " << res_2.second << "\n";
 
 		setGravity(pub_physics, -8.8);
 		api.openFingers();
@@ -105,7 +115,11 @@ int main(int _argc, char **_argv)
 		pub_target->WaitForConnection();
 		std::vector<double> angles;
 		for (unsigned int k = 0; k < grasp_data.shape(1); ++k) {
-				angles.push_back(grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180);
+			/* if (joints.at(k).back() == '2' && joints.at(k) != "rh_THJ2") */ 
+			/* 	angles.push_back(2 * grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180); */
+			/* else */ 
+			/* 	angles.push_back(grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180); */
+			angles.push_back(grasp_data(grasp_indices.at(res_1.second), k) * 3.14 / 180);
 		}
 		std::cout << target_poses.at(res_1.second) << "\n";
 
@@ -122,7 +136,11 @@ int main(int _argc, char **_argv)
 		for (auto traj_idx = 0; traj_idx < trajectories_data.shape(1); ++traj_idx) {
 			std::vector<double> angles;
 			for (unsigned int i = 0; i < trajectories_data.shape(2); i++) {
-				angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180);
+				/* if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2") */ 
+				/* 	angles.push_back(2 * trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180); */
+				/* else */
+				/* 	angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180); */
+			angles.push_back(trajectories_data(trial_idx, traj_idx, i) * 3.14 / 180);
 			}
 			api.setJoints(joints, angles);
 			waitMs(200);
@@ -132,6 +150,7 @@ int main(int _argc, char **_argv)
 
 		getTargetPose(pub_target);
 		waitMs(1000);
+		/* if (g_target_pose.Pos().Z() > 0.1 && g_target_pose.Pos().Z() < 0.25) { */
 		if (g_target_pose.Pos().Z() > 0.1) {
 			std::cout << "Successful regrasp!\n\n";
 			count_succ_regrasps++;
@@ -142,7 +161,6 @@ int main(int _argc, char **_argv)
 			xt::xarray<double> b1 = {{indices_data(trial_idx, 0), indices_data(trial_idx, 1), 0}};
 			a0 = xt::vstack(xt::xtuple(a0, b1));
 		}
-		std::string entity_name = "red_box";
 		removeModel(pub_delete, entity_name);
 	}
 	auto finish = std::chrono::high_resolution_clock::now();
@@ -152,7 +170,7 @@ int main(int _argc, char **_argv)
 	std::cout << "Number of successful regrasps : " << count_succ_regrasps << "!\n";
 	std::cout << "Number of responses : " << g_count_respones << "!\n";
 	/* std::cout << "Number of responses : " << a0 << "!\n"; */
-  xt::dump_npy("baseline_stats_vae10_30.npy", a0);//
+  xt::dump_npy(stats_filename, a0);//
 	// Shut down
   gazebo::client::shutdown();
   return 0;
