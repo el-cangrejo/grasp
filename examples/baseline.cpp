@@ -6,17 +6,18 @@ int g_count_respones{0};
 int main(int _argc, char **_argv)
 {
 	// Read grasps, trajectories, poses
-	const auto stats_filename = "data/stats/baseline_stats_pca_10.npy";
+	/* const auto stats_filename = "data/stats/baseline_stats_pca_10.npy"; */
+	const auto stats_filename = "data/stats/baseline_stats_cvae01_10.npy";
 
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
 
-	const auto trajectories_file = "data/traj/trajectories_pca_10.npy";
-	/* const auto trajectories_file = "data/traj/trajectories_cvae10_10.npy"; */
+	/* const auto trajectories_file = "data/traj/trajectories_pca_10.npy"; */
+	const auto trajectories_file = "data/traj/trajectories_cvae01_10.npy";
   const auto trajectories_data = xt::load_npy<double>(trajectories_file);
 
-	const auto indices_file = "data/traj/indices_pca_10.npy";
-	/* const auto indices_file = "data/traj/indices_cvae10_10.npy"; */
+	/* const auto indices_file = "data/traj/indices_pca_10.npy"; */
+	const auto indices_file = "data/traj/indices_cvae01_10.npy";
   const auto indices_data = xt::load_npy<double>(indices_file);
 	std::cout << "Grasps " << grasp_data.shape(0) << " " 
 												 << grasp_data.shape(1) << "\n";
