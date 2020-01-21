@@ -106,10 +106,10 @@ int main(int _argc, char **_argv) {
 
     std::vector<double> angles;
     for (unsigned int i = 0; i < data.shape(1); i++) {
-      if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2")
-			/* /1* if (joints.at(i).back() == '2') *1/ */ 
-					angles.push_back(2 * data(idx, i) * 3.14 / 180);
-			else
+      /* if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2") */
+			/* /1* /2* if (joints.at(i).back() == '2') *2/ *1/ */ 
+					/* angles.push_back(2 * data(idx, i) * 3.14 / 180); */
+			/* else */
 					angles.push_back(data(idx, i) * 3.14 / 180);
 		}
 
