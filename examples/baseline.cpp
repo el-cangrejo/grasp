@@ -5,20 +5,23 @@ int g_count_respones{0};
 
 int main(int _argc, char **_argv)
 {
-	const std::string encoder_name = "fingervae";
+	const std::string encoder_name = "fvae_f";
 	// Read grasps, trajectories, poses
 	/* const auto stats_filename = "data/stats/baseline_stats_pca_10.npy"; */
 	const std::string stats_filename = "data/stats/baseline_stats_" + encoder_name + "_10.npy";
+	/* const std::string stats_filename = "data/stats/baseline_stats_uns_10.npy"; */
 
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
 
 	/* const auto trajectories_file = "data/traj/trajectories_pca_10.npy"; */
 	const std::string trajectories_file = "data/traj/trajectories_" + encoder_name + "_10.npy";
+	/* const std::string trajectories_file = "data/traj/unsuccessful_trajectories.npy"; */
   const auto trajectories_data = xt::load_npy<double>(trajectories_file);
 
 	/* const auto indices_file = "data/traj/indices_pca_10.npy"; */
 	const std::string indices_file = "data/traj/indices_" + encoder_name + "_10.npy";
+	/* const std::string indices_file = "data/traj/unsuccessful_indices.npy"; */
   const auto indices_data = xt::load_npy<double>(indices_file);
 	std::cout << "Grasps " << grasp_data.shape(0) << " " 
 												 << grasp_data.shape(1) << "\n";
