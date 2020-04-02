@@ -25,7 +25,7 @@ int main(int _argc, char **_argv)
     }
 
 		auto data = xt::load_npy<double>(grasp_file);
-		auto labels = xt::load_npy<double>(labels_file);
+		/* auto labels = xt::load_npy<double>(labels_file); */
 
 		std::cout << data << std::endl;
 		std::cout << "Shape 0 : " << data.shape(0) << std::endl;
@@ -72,7 +72,14 @@ int main(int _argc, char **_argv)
 																			 "rh_THJ2", //18
 																			 "rh_THJ3", //19
 																			 "rh_THJ4", //20
-																			 "rh_THJ5"}; //21
+																			 "rh_THJ5", //21
+																			 "rh_LFJ5", //21
+																			 "virtual_ry_joint", //21
+																			 "virtual_rp_joint", //21
+																			 "virtual_rr_joint", //21
+																			 "virtual_px_joint", //21
+																			 "virtual_py_joint", //21
+																			 "virtual_pz_joint"}; //21
 
 		std::vector<std::string> grasp_types = {"TRIPOD",
 																						"PALMAR PINCH",
@@ -99,15 +106,23 @@ int main(int _argc, char **_argv)
 				std::vector<double> angles;
 				for (unsigned int i = 0; i < data.shape(1); i++) {
 					/* if (joints.at(i).back() == '2' && joints.at(i) != "rh_THJ2") */ 
-					if (joints.at(i).back() == '2') 
-						angles.push_back(2 * data(idx, i) * 3.14 / 180);
-					else 
+					/* if (joints.at(i).back() == '2') */ 
+					/* 	angles.push_back(2 * data(idx, i) * 3.14 / 180); */
+					/* else */ 
+						std::cout << joints[i] << " = " << data(idx, i) << "\n";
 						angles.push_back(data(idx, i) * 3.14 / 180);
 				}
+				angles.push_back(0);
+				angles.push_back(0);
+				angles.push_back(0);
+				angles.push_back(1);
+				angles.push_back(0);
+				angles.push_back(0);
+				angles.push_back(1);
 
 				/* std::cout << "Shape 0 : " << angles.size() << std::endl; */
-				std::cout << "Object Configuration -> " << obj_configs.at(labels(idx, 0) - 1) << std::endl;
-				std::cout << "Grasp Type -> " << grasp_types.at(labels(idx, 1) - 1) << std::endl;
+				/* std::cout << "Object Configuration -> " << obj_configs.at(labels(idx, 0) - 1) << std::endl; */
+				/* std::cout << "Grasp Type -> " << grasp_types.at(labels(idx, 2) - 1) << std::endl; */
 				api.setJoints(joints, angles);
     }
 
