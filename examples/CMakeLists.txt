@@ -104,3 +104,15 @@ target_link_libraries(baseline
 add_dependencies(baseline
     grasp_msgs
     grasp_interface)
+
+# Example of manipulation trajectories (regrasping) 
+add_executable (manipulation
+    manipulation.cpp)
+target_link_libraries(manipulation
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(manipulation
+    grasp_msgs
+    grasp_interface)
