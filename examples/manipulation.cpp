@@ -1,5 +1,16 @@
 #include "manipulation.hpp"
 
+/* 
+ * Script to perform object manipulation trajectories.
+ * To run first run:
+ * roscore & rosrun gazebo_ros gazebo worlds/my_empty.world --verbose -e dart
+ * or
+ * roscore & rosrun gazebo_ros gzserver worlds/my_empty.world --verbose -e dart
+ * to run headless.
+ * Then run the hand_remote example and then the manipulation providing a
+ * trajectory file and an indices file.
+ */
+
 ignition::math::Pose3d g_target_pose{0, 0, 0, 0, 0, 0};
 int g_count_respones{0};
 
