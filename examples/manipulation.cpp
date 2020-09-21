@@ -27,7 +27,7 @@ int main(int _argc, char **_argv)
 	std::cout << model_name << "\n";
 
 	const std::string stats_filename =
-		"data/manipulation/manipulation_statistics" + model_name + ".npy";
+		"data/manipulation/manipulation_statistics_" + model_name + ".npy";
 
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
