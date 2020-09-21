@@ -1,5 +1,16 @@
 #include "record_poses.hh"
 
+/* 
+ * Script to record the poses of the hand and the object during grasping.
+ * To run first run:
+ * roscore & rosrun gazebo_ros gazebo worlds/object.world --verbose -e dart
+ * or
+ * roscore & rosrun gazebo_ros gzserver worlds/object.world --verbose -e dart
+ * to run headless. (Object is red box)
+ * Then run the hand_remote example and then the record_poses and then the
+ * read_grasps scripts.
+ */
+
 ignition::math::Pose3d g_target_pose{0, 0, 0, 0, 0, 0};
 ignition::math::Pose3d g_hand_pose{0, 0, 0, 0, 0, 0};
 int g_grasp_idx{0};
