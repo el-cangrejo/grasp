@@ -7,9 +7,9 @@ int main(int _argc, char **_argv) {
   std::string config_file, robot;
   parseArgs(_argc, _argv, config_file, robot);
 
-	std::string object_name = "orange_box";
-	std::string model_filename = "model://orange_box";
-	std::string file_name = "test_trial.rest.yml";
+	std::string object_name = "red_box";
+	std::string model_filename = "model://red_box";
+	std::string file_name = "red_large_trial.rest.yml";
 	std::vector<ignition::math::Pose3d> target_poses;
 	std::vector<ignition::math::Pose3d> hand_poses;
 	std::vector<int> grasp_indices;
@@ -33,6 +33,7 @@ int main(int _argc, char **_argv) {
 	interface.init(config_file,  robot);
 
   std::string line{};
+	std::cout << "Number of loaded poses: " << target_poses.size() << "\n";
 	for (auto i = 0; i < target_poses.size(); ++i) {
 		interface.openFingers();
 		waitMs(1000);
