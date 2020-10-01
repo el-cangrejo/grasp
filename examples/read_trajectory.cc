@@ -1,16 +1,12 @@
 /*!
-    \file examples/hand_remote.cc
-    \brief Control manipulator example
-
-    \author João Borrego : jsbruglie
 */
 
-#include "read_grasps.hh"
+#include "read_trajectory.hh"
 
 int main(int _argc, char **_argv) {
   // Command-line arguments
-  std::string config_file, grasp_file, labels_file, robot;
-  parseArgs(_argc, _argv, config_file, grasp_file, labels_file, robot);
+  std::string config_file, trajectory_file, robot;
+  parseArgs(_argc, _argv, config_file, trajectory_file, robot);
 
   // Load gazebo as a client
   gazebo::client::setup(_argc, _argv);
@@ -20,14 +16,14 @@ int main(int _argc, char **_argv) {
   node->Init();
 
   // Interface
-  Interface api("shadowhand");
+  Interface api;
   // Init interface with config file
   if (!api.init(config_file, robot)) {
     std::cout << "Exiting..." << std::endl;
     exit(EXIT_FAILURE);
   }
 
-  auto data = xt::load_npy<double>(grasp_file);
+  auto data = xt::load_npy<double>(trajectory_file);
 
   std::cout << data << std::endl;
   std::cout << "Shape 0 : " << data.shape(0) << std::endl;
@@ -57,10 +53,11 @@ int main(int _argc, char **_argv) {
 
   // Main loop
   std::string line = "";
-	for (auto traj_idx = 0; traj_idx < data.shape(1); ++traj_idx) {
+	for (auto traj_idx = 0; traj_idx < data.shape(0); ++traj_idx) {
     std::vector<double> angles;
-    for (unsigned int i = 0; i < data.shape(1); i++) {
-					angles.push_back(data(traj_idx, i) * 3.14 / 180);
+    for (unsigned int joint_idx = 0; joint_idx < data.shape(1); joint_idx++) {
+					angles.push_back((180 - data(traj_idx, joint_idx)) * 3.14 / 180);
+					/* angles.push_back(data(traj_idx, i) * 3.14 / 180); */
 		}
 		api.setJoints(joints, angles);
 		waitMs(200);
@@ -79,24 +76,19 @@ const std::string getUsage(const char *argv_0) {
 
 //////////////////////////////////////////////////
 void parseArgs(int argc, char **argv, std::string &cfg_dir,
-               std::string &grasp_file, std::string &labels_file,
-               std::string &robot) {
+               std::string &trajectory_file, std::string &robot) {
   int opt;
-  bool c, r, g, l;
+  bool c, r, t;
 
-  while ((opt = getopt(argc, argv, "c: g: l: r:")) != EOF) {
+  while ((opt = getopt(argc, argv, "c: t: r:")) != EOF) {
     switch (opt) {
     case 'c':
       c = true;
       cfg_dir = optarg;
       break;
-    case 'g':
-      g = true;
-      grasp_file = optarg;
-      break;
-    case 'l':
-      l = true;
-      labels_file = optarg;
+    case 't':
+      t = true;
+      trajectory_file = optarg;
       break;
     case 'r':
       r = true;
@@ -110,15 +102,14 @@ void parseArgs(int argc, char **argv, std::string &cfg_dir,
     }
   }
 
-  if (!c || !r || !g || !l) {
+  if (!c || !r || !t) {
     std::cerr << getUsage(argv[0]);
     exit(EXIT_FAILURE);
   }
 
   std::cout << "Parameters:\n"
             << "   Robot configuration yaml '" << cfg_dir << "'\n"
-            << "   Grasp Dataset '" << grasp_file << "'\n"
-            << "   Grasp Labels  '" << labels_file << "'\n"
+            << "   Trajectory file '" << trajectory_file << "'\n"
             << "   Robot                    '" << robot << "'\n"
             << std::endl;
 }
