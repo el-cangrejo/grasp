@@ -17,8 +17,8 @@ int g_count_respones{0};
 int main(int _argc, char **_argv)
 {
 	// Parse command line arguments
-  std::string config_file, robot, trajectories_file, indices_file; 
-  parseArgs(_argc, _argv, config_file, robot, trajectories_file, indices_file);
+  std::string config_file, robot, trajectories_file, indices_file, n; 
+  parseArgs(_argc, _argv, config_file, robot, trajectories_file, indices_file, n);
 
 	// Read grasps, trajectories, poses
 	std::string model_name =
@@ -27,7 +27,7 @@ int main(int _argc, char **_argv)
 	std::cout << model_name << "\n";
 
 	const std::string stats_filename =
-		"data/manipulation/manipulation_statistics_" + model_name + ".npy";
+		"data/manipulation/statistics/manipulation_statistics_" + model_name + "_trial_" + n + ".npy";
 
 	const auto grasp_file = "data/grasps.npy";
   const auto grasp_data = xt::load_npy<double>(grasp_file);
@@ -46,7 +46,7 @@ int main(int _argc, char **_argv)
 													<< indices_data.shape(1) << "\n";
 
 	const std::string model_uri = "model://red_box";
-	const std::string file_name = "baseline_trial.rest.yml";
+	const std::string file_name = "data/recorded_grasps/baseline_trial.rest.yml";
 	const std::string object_name = "baseline";
 	std::string entity_name = "red_box";
 
@@ -254,12 +254,13 @@ void loadFromYml(
     }
 }
 
-void parseArgs(int argc, char **argv, std::string &cfg_dir,
-               std::string &robot, std::string &trajectories_file, std::string &indices_file) {
+void parseArgs(int argc, char **argv, std::string &cfg_dir, std::string &robot,
+		std::string &trajectories_file, std::string &indices_file,std::string
+		&trial_count) {
   int opt;
-  bool c, r, t, i;
+  bool c, r, t, i, n;
 
-  while ((opt = getopt(argc, argv, "c: r: t: i:")) != EOF) {
+  while ((opt = getopt(argc, argv, "c: r: t: i: n:")) != EOF) {
     switch (opt) {
     case 'c':
       c = true;
@@ -277,19 +278,26 @@ void parseArgs(int argc, char **argv, std::string &cfg_dir,
       i = true;
       indices_file = optarg;
       break;
+    case 'n':
+      n = true;
+      trial_count = optarg;
+      break;
     default:
       std::cout << std::endl;
       exit(EXIT_FAILURE);
     }
   }
 
-  if (!c || !r || !t || !i) {
+  if (!c || !r || !t || !i || !n) {
     exit(EXIT_FAILURE);
   }
 
   std::cout << "Parameters:\n"
             << "   Robot configuration yaml '" << cfg_dir << "'\n"
             << "   Robot                    '" << robot << "'\n"
+            << "   Trajectory file          '" << trajectories_file << "'\n"
+            << "   Indices file             '" << indices_file << "'\n"
+            << "   Trial count              '" << trial_count << "'\n"
             << std::endl;
 }
 

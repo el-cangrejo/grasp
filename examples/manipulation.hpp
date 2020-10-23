@@ -46,8 +46,9 @@ void loadFromYml(
 		std::vector<ignition::math::Pose3d> &hand_poses, 
 		std::vector<int> &grasp_indices);
 
-void parseArgs(int argc, char **argv, std::string &cfg_dir,
-               std::string &robot, std::string &trajectories_file, std::string &indices_file);
+void parseArgs(int argc, char **argv, std::string &cfg_dir, std::string &robot,
+		std::string &trajectories_file, std::string &indices_file, std::string
+		&trial_count);
 
 std::vector<std::string> joints = {"rh_FFJ2", //1
 																	 "rh_FFJ2", //2
