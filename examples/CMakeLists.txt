@@ -117,3 +117,14 @@ target_link_libraries(contacts_example
 add_dependencies(contacts_example
     grasp_msgs)
 
+# Hand plugin example client
+add_executable (run_grasps_for_size_interpolation
+    run_grasps_for_size_interpolation.cc)
+target_link_libraries(run_grasps_for_size_interpolation
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(run_grasps_for_size_interpolation
+    grasp_msgs
+    grasp_interface)
