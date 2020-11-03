@@ -128,3 +128,15 @@ target_link_libraries(read_trajectory
 add_dependencies(read_trajectory
     grasp_msgs
     grasp_interface)
+
+# Example of manipulation trajectories for video recording
+add_executable (video
+    video_record_trajectories.cpp)
+target_link_libraries(video
+    grasp_msgs
+    grasp_interface
+    ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES}
+    ${YAML_CPP_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(video
+    grasp_msgs
+    grasp_interface)
