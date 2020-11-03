@@ -100,7 +100,6 @@ int main(int _argc, char **_argv)
 	auto a0 = xt::empty<int>(sh0);
 	
 	for (int trial_idx = 0; trial_idx < indices_data.shape(0); ++trial_idx) {
-	/* for (int trial_idx = 0; trial_idx < 5; ++trial_idx) { */
 		std::cout << "Trial: " << trial_idx << "\n";
 		std::cout << "Indices 0 : " << indices_data(trial_idx, 0) << " " 
 																<< indices_data(trial_idx, 1) << "\n";
@@ -162,8 +161,9 @@ int main(int _argc, char **_argv)
 		waitMs(1000);
 		/* if (g_target_pose.Pos().Z() > 0.1 && g_target_pose.Pos().Z() < 0.25) { */
 		if (g_target_pose.Pos().Z() > 0.1) {
-			std::cout << "Successful regrasp!\n\n";
 			count_succ_regrasps++;
+			std::cout << "Successful regrasp!\n";
+			std::cout << "Successful regrasps: " << count_succ_regrasps << " / " << trial_idx+1 << "\n\n";
 			xt::xarray<double> b1 = {{indices_data(trial_idx, 0), indices_data(trial_idx, 1), 1}};
 			a0 = xt::vstack(xt::xtuple(a0, b1));
 		} else {
@@ -176,7 +176,7 @@ int main(int _argc, char **_argv)
 	auto finish = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = finish - start;
 	std::cout << "\n";
-	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+	std::cout << "Elapsed time: " << elapsed.count() / 60 << " mins\n";
 	std::cout << "Number of successful regrasps : " << count_succ_regrasps << "!\n";
 	std::cout << "Number of responses : " << g_count_respones << "!\n";
 	/* std::cout << "Number of responses : " << a0 << "!\n"; */
