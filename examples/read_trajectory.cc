@@ -1,5 +1,5 @@
 /*!
-*/
+ */
 
 #include "read_trajectory.hh"
 
@@ -53,14 +53,14 @@ int main(int _argc, char **_argv) {
 
   // Main loop
   std::string line = "";
-	for (auto traj_idx = 0; traj_idx < data.shape(0); ++traj_idx) {
+  for (auto traj_idx = 0; traj_idx < data.shape(0); ++traj_idx) {
     std::vector<double> angles;
     for (unsigned int joint_idx = 0; joint_idx < data.shape(1); joint_idx++) {
-					angles.push_back((180 - data(traj_idx, joint_idx)) * 3.14 / 180);
-					/* angles.push_back(data(traj_idx, i) * 3.14 / 180); */
-		}
-		api.setJoints(joints, angles);
-		waitMs(200);
+      angles.push_back((180 - data(traj_idx, joint_idx)) * 3.14 / 180);
+      /* angles.push_back(data(traj_idx, i) * 3.14 / 180); */
+    }
+    api.setJoints(joints, angles);
+    waitMs(200);
   }
 
   // Shut down
@@ -117,4 +117,3 @@ void parseArgs(int argc, char **argv, std::string &cfg_dir,
 void inline waitMs(int delay) {
   std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 }
-

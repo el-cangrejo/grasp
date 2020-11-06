@@ -1,8 +1,8 @@
 // Gazebo
 #include <gazebo/gazebo_client.hh>
 #include <gazebo/gazebo_config.h>
-#include <gazebo/transport/transport.hh>
 #include <gazebo/msgs/msgs.hh>
+#include <gazebo/transport/transport.hh>
 
 // Interface
 #include "Interface.hh"
@@ -18,16 +18,16 @@
 #define PROMPT "> "
 
 /// Topic monitored by target plugin for incoming requests
-#define TARGET_REQUEST_TOPIC   "~/grasp/target"
+#define TARGET_REQUEST_TOPIC "~/grasp/target"
 /// Topic to which target plugin publishes replies
-#define TARGET_RESPONSE_TOPIC  "~/grasp/target/response"
+#define TARGET_RESPONSE_TOPIC "~/grasp/target/response"
 
 /// Get pose request
-#define TARGET_GET_POSE        grasp::msgs::TargetRequest::GET_POSE
+#define TARGET_GET_POSE grasp::msgs::TargetRequest::GET_POSE
 /// Set pose request
-#define TARGET_SET_POSE        grasp::msgs::TargetRequest::SET_POSE
+#define TARGET_SET_POSE grasp::msgs::TargetRequest::SET_POSE
 /// Get updated resting pose request
-#define TARGET_GET_REST_POSE   grasp::msgs::TargetRequest::GET_REST_POSE
+#define TARGET_GET_REST_POSE grasp::msgs::TargetRequest::GET_REST_POSE
 
 /// Shared pointer declaration for response message type
 typedef const boost::shared_ptr<const grasp::msgs::TargetResponse>
@@ -38,10 +38,6 @@ typedef const boost::shared_ptr<const grasp::msgs::TargetResponse>
 void getTargetPose(gazebo::transport::PublisherPtr pub);
 
 /// TODO
-void onTargetResponse(TargetResponsePtr & _msg);
+void onTargetResponse(TargetResponsePtr &_msg);
 
-void parseArgs(
-    int argc,
-    char** argv,
-    std::string & cfg_dir,
-    std::string & robot);
+void parseArgs(int argc, char **argv, std::string &cfg_dir, std::string &robot);

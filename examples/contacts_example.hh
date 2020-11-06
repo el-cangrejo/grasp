@@ -8,8 +8,8 @@
 // Gazebo
 #include <gazebo/gazebo_client.hh>
 #include <gazebo/gazebo_config.h>
-#include <gazebo/transport/transport.hh>
 #include <gazebo/msgs/msgs.hh>
+#include <gazebo/transport/transport.hh>
 
 // I/O streams
 #include <iostream>
@@ -22,9 +22,9 @@
 #define PROMPT "> "
 
 /// Topic for incoming requests
-#define REQUEST_TOPIC   "~/grasp/contact"
- /// Topic for outgoing responses
-#define RESPONSE_TOPIC  "~/grasp/contact/response"
+#define REQUEST_TOPIC "~/grasp/contact"
+/// Topic for outgoing responses
+#define RESPONSE_TOPIC "~/grasp/contact/response"
 
 /// Declaration for request aux message type
 typedef grasp::msgs::CollisionRequest CollisionRequest;
@@ -43,8 +43,8 @@ typedef const boost::shared_ptr<const grasp::msgs::ContactResponse>
 /// \param collision1 Name of first collision in pair to test
 /// \param collision2 Name of second collision in pair to test
 void getContactBetween(gazebo::transport::PublisherPtr pub,
-    const std::string & collision1,
-    const std::string & collision2);
+                       const std::string &collision1,
+                       const std::string &collision2);
 
 /// \brief Change surface properties
 /// \param pub Communication publisher
@@ -52,6 +52,5 @@ void getContactBetween(gazebo::transport::PublisherPtr pub,
 /// \param link Target link
 /// \param collision Target collision
 void changeSurface(gazebo::transport::PublisherPtr pub,
-    const std::string & model,
-    const std::string & link,
-    const std::string & collision);
+                   const std::string &model, const std::string &link,
+                   const std::string &collision);
